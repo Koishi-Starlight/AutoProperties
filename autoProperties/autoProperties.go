@@ -18,13 +18,10 @@ func (u Unit) Get(t UnitType) float64 {
 	if t != u.T {
 		if t == Inch {
 			value *= 0.393701
-			u.T = Inch
 		} else {
 			value /= 0.393701
-			u.T = CM
 		}
 	}
-
 	return value
 }
 
@@ -41,25 +38,21 @@ type Auto interface {
 	EnginePower() int
 }
 
-type DimensionsInch struct {
+type DimensionsType struct {
 	length Unit
 	width  Unit
 	height Unit
 }
 
-func (d DimensionsInch) Length() Unit { return d.length }
-func (d DimensionsInch) Width() Unit  { return d.width }
-func (d DimensionsInch) Height() Unit { return d.height }
-
-type DimensionsCM struct {
-	length Unit
-	width  Unit
-	height Unit
+func (d DimensionsType) Length() Unit { return d.length }
+func (d DimensionsType) Width() Unit  { return d.width }
+func (d DimensionsType) Height() Unit { return d.height }
+func NewUnitCM(value float64) Unit {
+	return Unit{Value: value, T: CM}
 }
-
-func (d DimensionsCM) Length() Unit { return d.length }
-func (d DimensionsCM) Width() Unit  { return d.width }
-func (d DimensionsCM) Height() Unit { return d.height }
+func NewUnitInch(value float64) Unit {
+	return Unit{Value: value, T: Inch}
+}
 
 type baseAuto struct {
 	model       string
@@ -76,15 +69,15 @@ func (auto BMW) Model() string          { return auto.model }
 func (auto BMW) MaxSpeed() int          { return auto.maxSpeed }
 func (auto BMW) EnginePower() int       { return auto.enginePower }
 
-func NewBMW(model string, maxSpeed, enginePower int, height, width, length float64) BMW {
+func NewBMW(model string, maxSpeed, enginePower int, height, width, length Unit) BMW {
 	return BMW{baseAuto{
 		model:       model,
 		maxSpeed:    maxSpeed,
 		enginePower: enginePower,
-		dimensions: DimensionsCM{
-			height: Unit{Value: height, T: CM},
-			width:  Unit{Value: width, T: CM},
-			length: Unit{Value: length, T: CM},
+		dimensions: DimensionsType{
+			height: height,
+			width:  width,
+			length: length,
 		},
 	}}
 }

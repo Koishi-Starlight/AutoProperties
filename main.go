@@ -7,15 +7,17 @@ import (
 
 func PrintAutoParams(a AutoProperties.Auto) {
 	fmt.Printf("Brand: %v\nModel: %v\nEnginePower: %v\nMaxSpeed: %v\n", a.Brand(), a.Model(), a.EnginePower(), a.MaxSpeed())
-	fmt.Printf("Dimensions: Length, Width, Height %v", a.Dimensions())
+	dim := a.Dimensions()
+	fmt.Printf("Dimensions: Length %v, Width %v, Height %v", dim.Length(), dim.Width(), dim.Height())
 }
 func main() {
 	bmw1 := AutoProperties.NewBMW(
 		"RX7",
 		120,
 		40,
-		120,
-		90,
-		100)
+		AutoProperties.NewUnitCM(100),
+		AutoProperties.NewUnitCM(80),
+		AutoProperties.NewUnitCM(150),
+	)
 	PrintAutoParams(bmw1)
 }
